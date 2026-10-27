@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NevilleCodes · R et data science</title>
+<meta name="description" content="Notes, code R et notions de data science par Neville NGOY, ingénieur en informatique et mathématicien.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f7fb; --surface:#ffffff; --ink:#0f1b2d; --muted:#51607a; --line:#d6deea;
+  --blue:#1d4ed8; --teal:#0b7f72; --amber:#c77f00; --code-bg:#0f1b2d; --code-ink:#e6edf7;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1524; --surface:#13203a; --ink:#e8eef8; --muted:#9fb0cb; --line:#26375a;
+    --blue:#7da2ff; --teal:#4fd1c1; --amber:#f2b441; --code-bg:#08101d; --code-ink:#e6edf7;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--sans)}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:4px}
+.wrap{max-width:70rem;margin:0 auto;padding:0 1.5rem}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:3.5rem}
+.logo{font:500 1rem var(--mono);color:var(--ink);text-decoration:none}
+nav a{margin-left:1.25rem;color:var(--muted);text-decoration:none;font-size:.95rem}
+nav a:hover{color:var(--ink)}
+.hero{padding:4.5rem 0 3.5rem}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+h1{font:700 clamp(2.6rem,6vw,4.4rem)/1.04 var(--serif);margin:0 0 1.25rem;letter-spacing:-.01em}
+.lead{font-size:1.2rem;color:var(--muted);max-width:34rem;margin:0 0 2rem}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-block;padding:.7rem 1.2rem;border-radius:6px;font-weight:500;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn:hover{transform:translateY(-1px)}
+figure.plot{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1rem .75rem}
+figure.plot svg{width:100%;height:auto;display:block}
+figcaption{font:400 .85rem var(--mono);color:var(--muted);margin-top:.5rem}
+.axis{stroke:var(--line);stroke-width:1.5}
+.dot{fill:var(--blue)}
+.fit{stroke:var(--amber);stroke-width:3;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:0;animation:draw 1.6s .3s ease-out backwards}
+@keyframes draw{from{stroke-dashoffset:420}}
+section{padding:4rem 0;border-top:1px solid var(--line)}
+h2{font:700 clamp(1.8rem,3.5vw,2.4rem)/1.15 var(--serif);margin:0 0 .75rem}
+.intro{color:var(--muted);max-width:40rem;margin:0 0 2.5rem}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.about p{margin:0 0 1rem;max-width:36rem}
+.facts{list-style:none;margin:0;padding:0;border-left:3px solid var(--teal)}
+.facts li{padding:.55rem 0 .55rem 1.1rem;border-bottom:1px solid var(--line)}
+.facts li:last-child{border-bottom:0}
+.facts b{display:block;font-weight:500}
+.facts span{color:var(--muted);font-size:.95rem}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(21rem,1fr));gap:1.5rem}
+.topic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.4rem;min-width:0}
+.topic h3{font:700 1.3rem var(--serif);margin:0 0 .4rem}
+.topic p{margin:0 0 1rem;color:var(--muted);font-size:1rem}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:1rem;overflow-x:auto;font:400 .85rem/1.6 var(--mono)}
+.path{list-style:none;margin:0;padding:0;counter-reset:s;max-width:44rem}
+.path li{counter-increment:s;position:relative;padding:0 0 1.6rem 3.2rem;border-left:2px solid var(--line);margin-left:1rem}
+.path li:last-child{border-left-color:transparent;padding-bottom:0}
+.path li::before{content:counter(s);position:absolute;left:-1.1rem;top:0;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--blue);color:var(--bg);display:grid;place-items:center;font:500 .95rem var(--mono)}
+.path b{display:block;font:700 1.15rem var(--serif)}
+.path span{color:var(--muted)}
+.repo{background:var(--ink);color:var(--bg);border-radius:12px;padding:2.5rem}
+.repo h2{color:var(--bg)}
+.repo p{max-width:38rem;margin:0 0 1.5rem;opacity:.85}
+.repo code{font-family:var(--mono);background:rgba(255,255,255,.12);padding:.1rem .4rem;border-radius:4px}
+.repo .btn{border-color:var(--bg);color:var(--bg)}
+.repo .btn.primary{background:var(--bg);color:var(--ink)}
+footer{padding:2.5rem 0;border-top:1px solid var(--line);color:var(--muted);font-size:.95rem}
+@media (max-width:52rem){
+  .hero .wrap,.about{grid-template-columns:1fr}
+  nav a{margin-left:.9rem}
+  .topics{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.fit{animation:none}html{scroll-behavior:auto}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#haut">NevilleCodes</a>
+    <nav aria-label="Navigation principale">
+      <a href="#apropos">À propos</a>
+      <a href="#notions">Notions</a>
+      <a href="#parcours">Parcours</a>
+      <a href="#depot">Dépôt</a>
+    </nav>
+  </div>
+</header>
+
+<main id="haut">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Apprendre la data science en écrivant du R</h1>
+        <p class="lead">NevilleCodes rassemble du code R, des notions de statistique et des exemples de data science, avec un fil conducteur : comprendre ce que le code calcule avant de le lancer.</p>
+        <div class="btns">
+          <a class="btn primary" href="https://github.com/ngoymwibeleneville/NevilleCodes">Voir le dépôt sur GitHub</a>
+          <a class="btn" href="#notions">Parcourir les notions</a>
+        </div>
+      </div>
+      <figure class="plot">
+        <svg viewBox="0 0 480 310" role="img" aria-label="Nuage de points avec une droite de régression ascendante">
+          <line class="axis" x1="30" y1="285" x2="450" y2="285"/>
+          <line class="axis" x1="30" y1="285" x2="30" y2="20"/>
+          <g id="pts"></g>
+          <line class="fit" x1="40" y1="270" x2="440" y2="70"/>
+        </svg>
+        <figcaption>y = β₀ + β₁x + ε</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <section id="apropos">
+    <div class="wrap about">
+      <div>
+        <h2>À propos de Neville NGOY</h2>
+        <p>Je suis ingénieur en informatique et mathématicien. Je travaille aujourd’hui dans la data science et l’intelligence artificielle, à la croisée de la rigueur mathématique et de la pratique du code.</p>
+        <p>J’utilise ce dépôt pour mettre en pratique ce que j’apprends et pour documenter mes méthodes en R, afin que chaque analyse puisse être relue, reproduite et améliorée.</p>
+        <p><a href="https://www.linkedin.com/search/results/people/?keywords=Neville%20NGOY" id="linkedin" rel="noopener">Me retrouver sur LinkedIn : Neville NGOY</a></p>
+      </div>
+      <ul class="facts">
+        <li><b>Formation</b><span>Ingénierie informatique et mathématiques</span></li>
+        <li><b>Domaine</b><span>Data science et intelligence artificielle</span></li>
+        <li><b>Outil principal</b><span>R, avec Positron comme environnement de travail</span></li>
+        <li><b>Approche</b><span>Comprendre la méthode, puis l’appliquer avec du code reproductible</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="notions">
+    <div class="wrap">
+      <h2>Les notions abordées</h2>
+      <p class="intro">Chaque notion associe une idée à un exemple court. Les extraits utilisent des jeux de données fournis avec R, donc vous pouvez les copier et les lancer tels quels.</p>
+      <div class="topics">
+        <article class="topic">
+          <h3>Importer et explorer</h3>
+          <p>Charger un fichier, repérer les types de variables et les valeurs manquantes avant toute analyse.</p>
+<pre><code>library(tidyverse)
+donnees &lt;- read_csv("data/ventes.csv")
+glimpse(donnees)
+summary(donnees)</code></pre>
+        </article>
+        <article class="topic">
+          <h3>Transformer avec le tidyverse</h3>
+          <p>Filtrer, regrouper et résumer un tableau avec le pipe natif <code>|&gt;</code>.</p>
+<pre><code>mtcars |&gt;
+  filter(cyl == 4) |&gt;
+  group_by(gear) |&gt;
+  summarise(mpg_moyen = mean(mpg))</code></pre>
+        </article>
+        <article class="topic">
+          <h3>Visualiser avec ggplot2</h3>
+          <p>Montrer la relation entre deux variables avant de la modéliser.</p>
+<pre><code>ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm")</code></pre>
+        </article>
+        <article class="topic">
+          <h3>Statistiques et régression</h3>
+          <p>Estimer un effet, lire les coefficients et juger la qualité de l’ajustement.</p>
+<pre><code>modele &lt;- lm(mpg ~ wt + hp, data = mtcars)
+summary(modele)
+confint(modele)</code></pre>
+        </article>
+        <article class="topic">
+          <h3>Machine learning avec tidymodels</h3>
+          <p>Séparer apprentissage et test, entraîner un modèle, puis mesurer sa performance sur des données jamais vues.</p>
+<pre><code>library(tidymodels)
+split &lt;- initial_split(iris, prop = 0.8, strata = Species)
+rf &lt;- rand_forest(trees = 500) |&gt;
+  set_engine("ranger") |&gt;
+  set_mode("classification")
+fit(rf, Species ~ ., data = training(split))</code></pre>
+        </article>
+        <article class="topic">
+          <h3>Reproductibilité</h3>
+          <p>Figer les versions des paquets et produire un rapport qui se régénère d’une seule commande.</p>
+<pre><code>renv::init()
+renv::snapshot()
+# dans le terminal
+quarto render rapport.qmd</code></pre>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="parcours">
+    <div class="wrap">
+      <h2>Un parcours conseillé</h2>
+      <p class="intro">Si vous débutez en R, cet ordre évite de modéliser des données que l’on n’a pas encore comprises.</p>
+      <ol class="path">
+        <li><b>Installer l’environnement</b><span>R, puis Positron ou RStudio, et le paquet tidyverse.</span></li>
+        <li><b>Explorer les données</b><span>Dimensions, types, valeurs manquantes, distributions.</span></li>
+        <li><b>Transformer et visualiser</b><span>dplyr et ggplot2 pour poser les bonnes questions.</span></li>
+        <li><b>Modéliser</b><span>Régression, puis modèles de classification ou de prévision.</span></li>
+        <li><b>Évaluer et communiquer</b><span>Valider sur des données de test, puis rédiger un rapport reproductible.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="depot">
+    <div class="wrap">
+      <div class="repo">
+        <h2>Le code est dans le dépôt</h2>
+        <p>Les scripts et les exemples de ce site vivent dans <code>ngoymwibeleneville/NevilleCodes</code>. Clonez-le pour les exécuter chez vous.</p>
+<pre><code>git clone https://github.com/ngoymwibeleneville/NevilleCodes</code></pre>
+        <p></p>
+        <div class="btns">
+          <a class="btn primary" href="https://github.com/ngoymwibeleneville/NevilleCodes">Ouvrir sur GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/search/results/people/?keywords=Neville%20NGOY" rel="noopener">Neville NGOY sur LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Neville NGOY. Code R et notions de data science.</div>
+</footer>
+
+<script>
+(function(){
+  var noise=[8,-14,10,-6,16,-12,4,-18,12,-4,14,-10,6,-16,10,-2,12,-8];
+  var g=document.getElementById("pts"),ns="http://www.w3.org/2000/svg";
+  noise.forEach(function(n,i){
+    var c=document.createElementNS(ns,"circle");
+    c.setAttribute("class","dot");
+    c.setAttribute("cx",40+22.5*i);
+    c.setAttribute("cy",270-11.25*i+n);
+    c.setAttribute("r",5);
+    g.appendChild(c);
+  });
+})();
+</script>
+</body>
+</html>
